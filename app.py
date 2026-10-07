@@ -59,28 +59,35 @@ with tab1:
     )
 
     st.markdown("### Or customize your filters")
-    # Contextual Quick-Filter Bar with Granular Fields
-    col1, col2 = st.columns(2)
+    
+    # Updated Contextual Quick-Filter Bar
+    col1, col2, col3 = st.columns(3)
     with col1:
-        diet = st.selectbox("Dietary Needs", ["100% Pure Vegetarian", "Separate Jain Kitchen Available", "Vegan-Friendly Options", "No Restrictions"])
-        parking = st.selectbox("Parking & Access", ["Dedicated Valet", "Easy On-Site Parking", "Street Parking Only", "Any"])
+        occasion = st.selectbox("Occasion / Vibe", ["Casual Meal", "Quick Bite", "Celebration", "Late Night"])
     with col2:
-        ambiance = st.selectbox("Ambiance Profile", ["Quiet & Intimate", "Bustling / Family-Friendly", "Lively & High Energy", "Any"])
+        diet = st.selectbox("Dietary Toggle", ["Pure Veg", "Jain Available", "Non-Veg"])
+    with col3:
+        group = st.selectbox("Dining With", ["Friends", "Family", "Solo", "Date"])
+
+    col4, col5 = st.columns(2)
+    with col4:
+        ambiance = st.selectbox("Ambiance Profile", ["Quiet Intimate", "Bustling/ Family Friendly", "Lively and High Energy", "Any"])
+    with col5:
         budget = st.selectbox("True Bill for Two (Expected)", ["Under ₹1000", "₹1000 - ₹2500", "₹2500+"])
 
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Single-Action Trigger
-    discover_btn = st.button("🚀 Get My Top 3 Matches", type="primary", use_container_width=True)
+    # Updated Single-Action Trigger
+    discover_btn = st.button("🚀 Get 5 Best Matches", type="primary", use_container_width=True)
 
     if discover_btn:
         with st.spinner("Curating based on real, verified diner receipts..."):
             time.sleep(1.5) 
             
-        st.success("Found 3 matches that fit your vibe and dietary needs perfectly!")
+        st.success("Found 5 matches that fit your vibe and dietary needs perfectly!")
         st.markdown("---")
 
-        # Result 1: Featuring all new attributes
+        # Result 1: Featuring parking prominently in the details
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.subheader("1. Swati Snacks")
         st.markdown("**📍 Law Garden** | 🌟 *#1 for Consistent Quality*")
@@ -91,7 +98,8 @@ with tab1:
         c3.metric(label="Consistency", value="High", delta="Wknd/Wkday Match")
         c4.metric(label="True Bill (2 pax)", value="₹850")
         
-        st.markdown("🌱 **100% Pure Veg & Separate Jain Menu** | 🅿️ **Dedicated Valet** | 🗣️ **Bustling**")
+        # Parking and Access shown here in the result details
+        st.markdown("🌱 **Pure Veg & Jain Available** | 🅿️ **Dedicated Valet Parking** | 🗣️ **Bustling/ Family Friendly**")
         
         # Critical Consensus Block
         st.markdown("""
