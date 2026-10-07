@@ -9,17 +9,13 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CUSTOM CSS FOR CLEANER UI ---
+# --- CUSTOM CSS ---
 st.markdown("""
     <style>
     .stButton>button {
         width: 100%;
         border-radius: 8px;
         font-weight: bold;
-    }
-    .primary-btn>button {
-        background-color: #FF4B4B;
-        color: white;
     }
     .card {
         border: 1px solid #e0e0e0;
@@ -28,78 +24,87 @@ st.markdown("""
         margin-bottom: 20px;
         background-color: #f9f9fb;
     }
+    .critical-consensus {
+        background-color: #fff3cd;
+        color: #856404;
+        padding: 10px;
+        border-radius: 5px;
+        border-left: 4px solid #ffeeba;
+        font-size: 0.9em;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # --- APP HEADER ---
 st.title("🍽️ TrustBite")
-st.markdown("*Skip the endless scrolling. Find the perfect spot.*")
+st.markdown("*Skip the endless scrolling. Find the perfect spot based on real verified diners.*")
 st.divider()
 
 # --- TABS FOR USER JOURNEYS ---
-tab1, tab2 = st.tabs(["🔍 Find a Restaurant (Journey 1)", "✍️ Leave a Review (Journey 2)"])
+tab1, tab2 = st.tabs(["🔍 Find a Restaurant", "✍️ Leave a Review"])
 
 # ==========================================
 # JOURNEY 1: DISCOVERING & CHOOSING
 # ==========================================
 with tab1:
-    st.markdown("### What are you in the mood for?")
-    
-    # Contextual Quick-Filter Bar
-    col1, col2, col3 = st.columns(3)
+    st.markdown("### Quick Shortcut Scenarios")
+    # Quick launch chips for high-intent use cases
+    scenario = st.radio(
+        "Select a pre-configured mood:",
+        ["None (Custom Search)", "👨‍👩‍👧 Family Dinner (Quiet + Valet)", "🍟 Quick Bite with Friends", "🌙 Reliable Late-Night Craving"],
+        horizontal=True,
+        label_visibility="collapsed"
+    )
+
+    st.markdown("### Or customize your filters")
+    # Contextual Quick-Filter Bar with Granular Fields
+    col1, col2 = st.columns(2)
     with col1:
-        occasion = st.selectbox("Occasion", ["Casual Meal", "Quick Bite", "Celebration", "Late Night Craving"])
+        diet = st.selectbox("Dietary Needs", ["100% Pure Vegetarian", "Separate Jain Kitchen Available", "Vegan-Friendly Options", "No Restrictions"])
+        parking = st.selectbox("Parking & Access", ["Dedicated Valet", "Easy On-Site Parking", "Street Parking Only", "Any"])
     with col2:
-        diet = st.selectbox("Dietary Needs", ["Pure Veg", "Jain Options Available", "No Restrictions", "Vegan Friendly"])
-    with col3:
-        group = st.selectbox("Dining With", ["Friends", "Family", "Solo", "Date"])
+        ambiance = st.selectbox("Ambiance Profile", ["Quiet & Intimate", "Bustling / Family-Friendly", "Lively & High Energy", "Any"])
+        budget = st.selectbox("True Bill for Two (Expected)", ["Under ₹1000", "₹1000 - ₹2500", "₹2500+"])
 
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Single-Action Trigger
-    discover_btn = st.button("🚀 Get My 3 Best Matches", type="primary", use_container_width=True)
+    discover_btn = st.button("🚀 Get My Top 3 Matches", type="primary", use_container_width=True)
 
     if discover_btn:
-        with st.spinner("Curating based on real, trusted reviews..."):
-            time.sleep(1.5) # Simulate API call/ranking logic
+        with st.spinner("Curating based on real, verified diner receipts..."):
+            time.sleep(1.5) 
             
-        st.success("Found 3 matches that fit your vibe perfectly today!")
+        st.success("Found 3 matches that fit your vibe and dietary needs perfectly!")
         st.markdown("---")
 
-        # Result 1 (Mock Data naturally styled for Ahmedabad)
+        # Result 1: Featuring all new attributes
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.subheader("1. Swati Snacks")
         st.markdown("**📍 Law Garden** | 🌟 *#1 for Consistent Quality*")
         
-        c1, c2, c3 = st.columns(3)
-        c1.metric(label="Verified Trust Score", value="98/100", delta="Top 1%")
-        c2.metric(label="Weekend Service", value="Fast", delta="Consistent")
-        c3.metric(label="Live Wait Time", value="~15 mins", delta="-5 mins usual", delta_color="inverse")
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric(label="Trust Score", value="98/100", delta="Top 1%")
+        c2.metric(label="Live Wait", value="~15 mins", delta="Walk-in Ready", delta_color="normal")
+        c3.metric(label="Consistency", value="High", delta="Wknd/Wkday Match")
+        c4.metric(label="True Bill (2 pax)", value="₹850")
         
-        st.markdown("🌱 **Strictly Pure Veg & Jain** | 🅿️ Valet Available")
-        st.info("✅ **Must Order:** Panki Chatni & Baked Macaroni \n\n ⚠️ **Heads-up:** Can get very noisy during peak family hours.")
+        st.markdown("🌱 **100% Pure Veg & Separate Jain Menu** | 🅿️ **Dedicated Valet** | 🗣️ **Bustling**")
+        
+        # Critical Consensus Block
+        st.markdown("""
+        <div class='critical-consensus'>
+            <b>⚖️ Critical Consensus:</b> Consistently praised for authentic taste and hygiene. The main downside reported is tight seating and 25+ min waits on Sunday evenings.
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.info("✅ **Must Order:** Panki Chatni \n\n ⛔ **Overhyped / Skip:** Standard Pizzas (stick to regional dishes)")
         
         bc1, bc2 = st.columns(2)
         bc1.button("📍 Get Directions", key="dir1")
-        bc2.button("📅 Join Waitlist", key="res1", type="primary")
-        st.markdown("</div>", unsafe_allow_html=True)
-
-        # Result 2
-        st.markdown("<div class='card'>", unsafe_allow_html=True)
-        st.subheader("2. Little French House")
-        st.markdown("**📍 Navrangpura** | 🥐 *Great for Casual Friend Hangouts*")
-        
-        c1, c2, c3 = st.columns(3)
-        c1.metric(label="Verified Trust Score", value="89/100")
-        c2.metric(label="Weekend Service", value="Average")
-        c3.metric(label="Live Wait Time", value="0 mins", delta="Walk-in")
-        
-        st.markdown("🌱 **Pure Veg** | 🛵 Street Parking")
-        st.info("✅ **Must Order:** Mushroom Crepes \n\n ⚠️ **Heads-up:** Portions are slightly on the smaller side for the price.")
-        
-        bc1, bc2 = st.columns(2)
-        bc1.button("📍 Get Directions", key="dir2")
-        bc2.button("📅 Reserve Table", key="res2", type="primary")
+        bc2.button("📅 Join Live Waitlist", key="res1", type="primary")
         st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -107,10 +112,9 @@ with tab1:
 # JOURNEY 2: LEAVING A REVIEW
 # ==========================================
 with tab2:
-    st.markdown("### Drop an Honest Review")
-    st.write("Help the community by sharing the real experience, minus the hype.")
+    st.markdown("### Drop an Honest Review (15 Seconds)")
+    st.write("Help the community avoid bad meals by sharing the real experience.")
     
-    # Step 1: Search-to-Review
     restaurant_name = st.selectbox(
         "Which restaurant did you visit?", 
         ["Type or select...", "Swati Snacks", "Little French House", "Agashiye", "Manek Chowk Ratri Bazar", "Other"]
@@ -118,34 +122,49 @@ with tab2:
 
     if restaurant_name != "Type or select...":
         with st.form("review_form"):
-            # Step 1: Overall Verdict
-            st.markdown("#### 1. The Verdict")
+            
+            # --- MANDATORY QUICK TAPS ---
+            st.markdown("#### 1. The Context")
+            c1, c2 = st.columns(2)
+            visit_time = c1.selectbox("When did you go?", ["Weekday Lunch", "Weekday Dinner", "Weekend Lunch", "Weekend Dinner (Peak Rush)"])
+            visit_group = c2.selectbox("Who with?", ["Family", "Friends", "Date", "Solo"])
+
+            st.markdown("#### 2. The Verdict")
             verdict = st.radio(
                 "Overall Experience", 
                 ["Disappointed 😞", "Met Expectations 😐", "Exceeded Expectations 🤩"], 
                 horizontal=True
             )
 
-            # Step 2: Attribute Chips (using select sliders for ease of use)
-            st.markdown("#### 2. The Details")
-            c1, c2 = st.columns(2)
-            c1.select_slider("Food Quality", ["Poor", "Average", "Excellent"], value="Average")
-            c2.select_slider("Hygiene & Cleanliness", ["Questionable", "Average", "Spotless"], value="Average")
-            c1.select_slider("Weekend Rush/Service", ["Slow", "Manageable", "Quick"], value="Manageable")
-            c2.select_slider("Value for Money", ["Overpriced", "Fair", "Worth it"], value="Fair")
+            # Conditional Anti-Rant Guardrail for Negative Reviews
+            if verdict == "Disappointed 😞":
+                st.warning("What went wrong? (Select all that apply)")
+                issues = st.multiselect("Specific Issues", ["Food was bland / cold", "Slow service", "Poor hygiene / washrooms", "Misleading prices", "Too loud / cramped"])
 
-            # Step 3: Specific Recommendations
-            st.markdown("#### 3. Community Tips")
-            st.text_input("What dish should someone definitely order here?", placeholder="e.g., The truffle fries are amazing")
-            st.text_area("Any heads-up before going?", placeholder="e.g., Parking is a nightmare, take an auto.", max_chars=140)
+            st.markdown("#### 3. Dish Breakdown")
+            c3, c4 = st.columns(2)
+            c3.text_input("👍 Must-Order Dish", placeholder="e.g., Truffle Fries")
+            c4.text_input("👎 Skip / Overhyped Dish", placeholder="e.g., Red Sauce Pasta")
 
-            # Step 4: Anti-Hype Verification
-            st.markdown("#### 4. Verification (Anti-Hype Anchor)")
-            st.file_uploader("Upload receipt/bill to get a 'Verified Diner' badge (Optional)", type=['jpg', 'png', 'pdf'])
+            # --- OPTIONAL DEEP DIVE (PROGRESSIVE DISCLOSURE) ---
+            with st.expander("Detailed Reality Check & Verification (Optional)"):
+                st.markdown("Help establish the *True Cost* and *Actual Wait Times*.")
+                
+                ec1, ec2 = st.columns(2)
+                ec1.select_slider("Did you have to wait?", ["No Wait", "10-20 mins", "30+ mins"])
+                ec2.select_slider("Food Delivery Speed", ["Quick", "Normal", "Unusually Slow"])
+                
+                ec3, ec4 = st.columns(2)
+                ec3.select_slider("Hygiene & Cleanliness", ["Questionable", "Acceptable", "Spotless"], value="Acceptable")
+                actual_bill = ec4.number_input("Actual Total Bill Amount (₹)", min_value=0, step=100)
+                pax = ec4.number_input("For how many people?", min_value=1, step=1)
+                
+                st.markdown("**Get the 'Verified Diner' Badge 🏆**")
+                st.file_uploader("Upload receipt / bill photo", type=['jpg', 'png'])
 
             st.markdown("<br>", unsafe_allow_html=True)
-            submit_btn = st.form_submit_button("Submit Review 🚀", use_container_width=True)
+            submit_btn = st.form_submit_button("Submit Anonymous Review 🚀", use_container_width=True)
 
             if submit_btn:
-                st.success("Review published! Thanks for keeping it real. 🏆 Your feedback updates the Trust Score instantly.")
+                st.success("Review published! Thanks for keeping it real. 🏆 Your feedback instantly updates the Trust Score.")
                 st.balloons()
